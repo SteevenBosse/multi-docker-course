@@ -5,14 +5,34 @@ on:
     branches: master
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build react dev container
-        run: docker build -t sbosse/frontend-complex -f ./client/Dockerfile.dev ./client/
+      - name: Login to Docker Hub
+      - run: docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Run unit tests
-        run: docker run -e CI=true sbosse/frontend-complex npm test
+      - name: Build client dev container
+        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-client-dev -f ./client/Dockerfile.dev ./client/
+      
+      - name: Run client unit tests
+        run: docker run -e CI=true ${{ secrets.DOCKER_ID }}/complex-client-dev npm test
+
+      - name: Build client production
+        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-client-prod ./client
+ 
+      - name: Build server production
+        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-server-prod ./server
+      
+      - name: Build nginx production
+        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-nginx-prod ./nginx
+      
+      - name: Build worker production
+        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-worker-prod ./worker
+
+      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-client-prod
+      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-server-prod
+      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-nginx-prod
+      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-worker-prod
