@@ -18,7 +18,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build client dev container
-        run: docker build -t ${{ secrets.DOCKER_ID }}/complex-client-dev -f ./client/Dockerfile.dev ./client/
+        run: docker build -t "${{ secrets.DOCKER_ID }}/complex-client-dev" -f ./client/Dockerfile.dev ./client/
       
       - name: Run client unit tests
         run: docker run -e CI=true ${{ secrets.DOCKER_ID }}/complex-client-dev npm test
