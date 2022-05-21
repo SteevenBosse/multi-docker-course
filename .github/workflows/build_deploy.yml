@@ -32,7 +32,14 @@ jobs:
       - name: Build worker production
         run: docker build -t ${{ secrets.DOCKER_ID }}/complex-worker-prod ./worker
 
-      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-client-prod
-      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-server-prod
-      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-nginx-prod
-      - runs: docker push ${{ secrets.DOCKER_ID }}/complex-worker-prod
+      - name: Push client on Docker Hub
+        run: docker push ${{ secrets.DOCKER_ID }}/complex-client-prod
+      
+      - name: Push server on Docker Hub
+        run: docker push ${{ secrets.DOCKER_ID }}/complex-server-prod
+      
+      - name: Push nginx on Docker Hub
+        run: docker push ${{ secrets.DOCKER_ID }}/complex-nginx-prod
+      
+      - name: Push worker on Docker Hub
+        run: docker push ${{ secrets.DOCKER_ID }}/complex-worker-prod
