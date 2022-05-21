@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build react dev container
-        run: docker build -t sbosse/frontend-complex -f ./client/Dockerfile.dev .
+        run: docker build -t sbosse/frontend-complex -f ./client/Dockerfile.dev
       
       - name: Run unit tests
         run: docker run -e CI=true sbosse/frontend-complex npm test
