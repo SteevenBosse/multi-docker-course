@@ -17,7 +17,7 @@ jobs:
       
       - 
         name: Run client unit tests
-        run: docker run -e CI=true ${DOCKER_ID}/complex-client-dev npm test
+        run: docker run -e CI=true sbosse233/complex-client-dev npm test
 
       - 
         name: Login to Docker Hub
