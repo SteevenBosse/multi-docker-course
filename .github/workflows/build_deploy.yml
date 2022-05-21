@@ -21,31 +21,31 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build client dev container
-        run: docker build -t $DOCKER_ID/complex-client-dev" -f ./client/Dockerfile.dev ./client/
+        run: docker build -t ${DOCKER_ID}/complex-client-dev" -f ./client/Dockerfile.dev ./client/
       
       - name: Run client unit tests
-        run: docker run -e CI=true $DOCKER_ID/complex-client-dev npm test
+        run: docker run -e CI=true ${DOCKER_ID}/complex-client-dev npm test
 
       - name: Build client production
-        run: docker build -t $DOCKER_ID/complex-client-prod ./client
+        run: docker build -t ${DOCKER_ID}/complex-client-prod ./client
  
       - name: Build server production
-        run: docker build -t $DOCKER_ID/complex-server-prod ./server
+        run: docker build -t ${DOCKER_ID}/complex-server-prod ./server
       
       - name: Build nginx production
-        run: docker build -t $DOCKER_ID/complex-nginx-prod ./nginx
+        run: docker build -t ${DOCKER_ID}/complex-nginx-prod ./nginx
       
       - name: Build worker production
-        run: docker build -t $DOCKER_ID/complex-worker-prod ./worker
+        run: docker build -t ${DOCKER_ID}/complex-worker-prod ./worker
 
       - name: Push client on Docker Hub
-        run: docker push $DOCKER_ID/complex-client-prod
+        run: docker push ${DOCKER_ID}/complex-client-prod
       
       - name: Push server on Docker Hub
-        run: docker push $DOCKER_ID/complex-server-prod
+        run: docker push ${DOCKER_ID}/complex-server-prod
       
       - name: Push nginx on Docker Hub
-        run: docker push $DOCKER_ID/complex-nginx-prod
+        run: docker push ${DOCKER_ID}/complex-nginx-prod
       
       - name: Push worker on Docker Hub
-        run: docker push $DOCKER_ID/complex-worker-prod
+        run: docker push ${DOCKER_ID}/complex-worker-prod
