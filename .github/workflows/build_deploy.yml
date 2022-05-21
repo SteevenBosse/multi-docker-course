@@ -14,38 +14,49 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Login to Docker Hub
+      - 
+        name: Build client dev container
+        run: docker build -t ${DOCKER_ID}/complex-client-dev -f ./client/Dockerfile.dev ./client/
+      
+      - 
+        name: Run client unit tests
+        run: docker run -e CI=true ${DOCKER_ID}/complex-client-dev npm test
+
+      - 
+        name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build client dev container
-        run: docker build -t ${DOCKER_ID}/complex-client-dev -f ./client/Dockerfile.dev ./client/
-      
-      - name: Run client unit tests
-        run: docker run -e CI=true ${DOCKER_ID}/complex-client-dev npm test
+      -
+        name: Build and push client production
+        uses: docker/build-push-action@v3
+        with:
+          context: ./client
+          push: true
+          tags: sbosse233/complex-client:latest
 
-      - name: Build client production
-        run: docker build -t ${DOCKER_ID}/complex-client-prod ./client
- 
-      - name: Build server production
-        run: docker build -t ${DOCKER_ID}/complex-server-prod ./server
-      
-      - name: Build nginx production
-        run: docker build -t ${DOCKER_ID}/complex-nginx-prod ./nginx
-      
-      - name: Build worker production
-        run: docker build -t ${DOCKER_ID}/complex-worker-prod ./worker
+      -
+        name: Build and push server production
+        uses: docker/build-push-action@v3
+        with:
+          context: ./server
+          push: true
+          tags: sbosse233/complex-server:latest
 
-      - name: Push client on Docker Hub
-        run: docker push ${DOCKER_ID}/complex-client-prod
-      
-      - name: Push server on Docker Hub
-        run: docker push ${DOCKER_ID}/complex-server-prod
-      
-      - name: Push nginx on Docker Hub
-        run: docker push ${DOCKER_ID}/complex-nginx-prod
-      
-      - name: Push worker on Docker Hub
-        run: docker push ${DOCKER_ID}/complex-worker-prod
+      -
+        name: Build and push nginx production
+        uses: docker/build-push-action@v3
+        with:
+          context: ./nginx
+          push: true
+          tags: sbosse233/complex-nginx:latest
+
+      -
+        name: Build and push worker production
+        uses: docker/build-push-action@v3
+        with:
+          context: ./worker
+          push: true
+          tags: sbosse233/complex-worker:latest
