@@ -1,52 +1,31 @@
 version: '3'
 services:
   client:
-    build:
-      context: ./client
-      dockerfile: "Dockerfile.dev"
-    volumes:
-      - /app/node_modules
-      - ./client:/app
+    image: "sbosse233/complex-client"
+    mem_limit: 128m
+    hostname: client
+  server:
+    image: "sbosse233/complex-server"
+    mem_limit: 128m
+    hostname: api
     environment:
-      - WDS_SOCKET_PORT=0
-  api:
-    build:
-      context: ./server
-      dockerfile: "Dockerfile.dev"
-    environment:
-      - REDIS_PORT=6379
-      - REDIS_HOST=redis
-      - PGHOST=db
-      - PGPORT=5432
-      - PGUSER=fibUSER
-      - PGDATABASE=fibDB
-      - PGPASSWORD=mysecretpassword
-    volumes:
-      - /app/node_modules
-      - ./server:/app
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
+      - PGUSER=$PGUSER
+      - PGHOST=$PGHOST
+      - PGDATABASE=$PGDATABASE
+      - PGPASSWORD=$PGPASSWORD
+      - PGPORT=$PGPORT
   worker:
-    build:
-      context: ./worker
-      dockerfile: "Dockerfile.dev"
+    image: "sbosse233/complex-worker"
+    mem_limit: 128m
+    hostname: worker
     environment:
-      - REDIS_PORT=6379
-      - REDIS_HOST=redis
-    volumes:
-      - /app/node_modules
-      - ./worker:/app
+      - REDIS_HOST=$REDIS_HOST
+      - REDIS_PORT=$REDIS_PORT
   nginx:
-    restart: always
-    build:
-      context: ./nginx
-      dockerfile: "Dockerfile.dev"
+    image: "sbosse233/complex-nginx"
+    mem_limit: 128m
+    hostname: nginx
     ports:
-      - 8080:80
-  redis:
-    image: redis
-  db:
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=fibUSER
-      - POSTGRES_DB=fibDB
-      - POSTGRES_PASSWORD=mysecretpassword
+      - "80:80"
