@@ -43,10 +43,10 @@ services:
       - 8080:80
   redis:
     image: redis
-  db:
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_USER=fibUSER
-      - POSTGRES_DB=fibDB
-      - POSTGRES_PASSWORD=mysecretpassword
+  # db:
+    # image: postgres
+    # restart: always
+    # environment:
+    #   - POSTGRES_USER=fibUSER
+    #   - POSTGRES_DB=fibDB
+    #   - POSTGRES_PASSWORD=mysecretpassword

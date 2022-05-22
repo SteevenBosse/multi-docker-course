@@ -4,7 +4,7 @@ services:
     image: "sbosse233/complex-client"
     mem_limit: 128m
     hostname: client
-  server:
+  api:
     image: "sbosse233/complex-server"
     mem_limit: 128m
     hostname: api
