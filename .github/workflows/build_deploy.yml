@@ -57,3 +57,20 @@ jobs:
           context: ./worker
           push: true
           tags: sbosse233/complex-worker:latest
+
+      - 
+        name: Generate deployment package
+        run: zip -r deploy.zip . -x '*.git*'
+      
+      - 
+        name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: complex-app-udemy
+          environment_name: Complexappudemy-env
+          existing_bucket_name: 	elasticbeanstalk-us-east-1-728210958726
+          region: us-east-1
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
